@@ -1,0 +1,6 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="OMS Suite">
+    <test name="Order Flow">
+        <classes><class name="tests.OrderFlowTest"/></classes>
+    </test>
+</suite>
