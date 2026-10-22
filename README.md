@@ -1,0 +1,13 @@
+## Setup
+- Install Java 17 and Maven(https://dlcdn.apache.org/maven/maven-3/3.10.0/binaries/apache-maven-3.10.0-bin.zip)
+- Clone the repository
+
+## Run
+mvn clean test
+
+## Assumptions
+- Used fakestoreapi.com for login and orders (it doesn't save data, so the order is not really stored)
+- Payment has no public API, so I mocked it with WireMock on port 8089
+- Used REST Assured because Selenium is only for browser UI
+- DB is mocked with H2 in-memory to show how the validation would work
+- Test card 4111111111111111 = success, 4000000000000002 = declined
