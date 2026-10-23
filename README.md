@@ -16,3 +16,11 @@ mvn clean test
 - UI tests use saucedemo.com, since there is no UI for the fakestore APIs.
 - Payment failure can’t be simulated on the UI, so the UI failure cases are invalid login, locked user and checkout with missing details. Payment failure is covered in the API tests using the mocked payment service.
 - Chrome must be installed. Selenium Manager downloads the driver automatically.
+
+## CI/CD
+How it works
+- You push code to GitHub or create a pull request.
+- GitHub Actions starts the workflow.
+- It sets up Java 17 and Maven caching.
+- It runs mvn clean test -Dheadless=true.
+- It uploads the Surefire test reports, even if the tests fail.
