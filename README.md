@@ -11,3 +11,8 @@ mvn clean test
 - Used REST Assured because Selenium is only for browser UI
 - DB is mocked with H2 in-memory to show how the validation would work
 - Test card 4111111111111111 = success, 4000000000000002 = declined
+
+## UI Automation
+- UI tests use saucedemo.com, since there is no UI for the fakestore APIs.
+- Payment failure can’t be simulated on the UI, so the UI failure cases are invalid login, locked user and checkout with missing details. Payment failure is covered in the API tests using the mocked payment service.
+- Chrome must be installed. Selenium Manager downloads the driver automatically.
