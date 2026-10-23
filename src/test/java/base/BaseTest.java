@@ -2,27 +2,34 @@ package base;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.restassured.RestAssured;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static utils.TestData.*;
 
 public class BaseTest {
     protected static WireMockServer mock;
 
     @BeforeSuite
     public void setup() {
-        RestAssured.baseURI = "https://fakestoreapi.com";
+        RestAssured.baseURI = STORE_BASE_URL;
 
         // mock payment service
-        mock = new WireMockServer(8089);
+        mock = new WireMockServer(PAYMENT_PORT);
         mock.start();
+
         // good card -> success
-        mock.stubFor(post("/pay").withRequestBody(containing("4111111111111111"))
-                .willReturn(okJson("{\"status\":\"SUCCESS\",\"txnId\":\"TXN123\"}")));
+        mock.stubFor(post(PAY_ENDPOINT).withRequestBody(containing(VALID_CARD))
+                .willReturn(okJson(String.format(
+                        "{\"status\":\"%s\",\"txnId\":\"%s\"}", STATUS_SUCCESS, TXN_ID))));
+
         // bad card -> declined
-        mock.stubFor(post("/pay").withRequestBody(containing("4000000000000002"))
-                .willReturn(aResponse().withStatus(402)
+        mock.stubFor(post(PAY_ENDPOINT).withRequestBody(containing(DECLINED_CARD))
+                .willReturn(aResponse().withStatus(HTTP_PAYMENT_FAILED)
                         .withHeader("Content-Type", "application/json")
-                        .withBody("{\"status\":\"FAILED\",\"reason\":\"Card declined\"}")));
+                        .withBody(String.format(
+                                "{\"status\":\"%s\",\"reason\":\"%s\"}", STATUS_FAILED, DECLINED_REASON))));
     }
 
     @AfterSuite

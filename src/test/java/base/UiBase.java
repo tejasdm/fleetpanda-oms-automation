@@ -7,10 +7,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 import java.time.Duration;
+import java.util.Map;
+
+import static utils.TestData.UI_URL;
 
 public class UiBase {
     protected WebDriver driver;
-    protected static final String URL = "https://www.saucedemo.com";
 
     @BeforeMethod
     public void startBrowser() {
@@ -20,17 +22,16 @@ public class UiBase {
             options.addArguments("--headless=new", "--window-size=1920,1080");
         }
         options.addArguments("--disable-notifications");
-        // stops chrome showing the "change your password" popup
         options.addArguments("--password-store=basic");
-        options.setExperimentalOption("prefs", java.util.Map.of(
+        options.setExperimentalOption("prefs", Map.of(
                 "credentials_enable_service", false,
                 "profile.password_manager_enabled", false,
                 "profile.password_manager_leak_detection", false));
 
         driver = new ChromeDriver(options);
         driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0)); // using explicit waits only
-        driver.get(URL);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
+        driver.get(UI_URL);
     }
 
     @AfterMethod(alwaysRun = true)
